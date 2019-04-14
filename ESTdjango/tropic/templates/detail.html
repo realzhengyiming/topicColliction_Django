@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="utf-8"> 
+<title>菜鸟教程(runoob.com)</title> 
+</head>
+<body>
+
+<video width="320" height="240" controls>
+    <source src="/static/files/extfiles/ext_2018425091228712.mp4" type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+  您的浏览器不支持 HTML5 video 标签。
+</video>
+
+
+    <h1>注册页面</h1>
+{#    # Django的form的作用：#}
+{## 1、生成html标签#}
+{## 2、用来做用户提交的验证#}
+    <form method="POST" enctype="multipart/form-data">
+{#        <!--{% csrf_token %}-->#}
+        {{uf.as_p}}
+        <input type="submit" value="OK" />
+    </form>
+{#    <a href="http://127.0.0.1:8000/login">登陆</a>#}
+
+
+</body>
+</html>
+

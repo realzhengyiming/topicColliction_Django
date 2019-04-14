@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" href="/static/media/city.png"><!--这个是图标的地址的-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />     
+<meta name="apple-mobile-web-app-capable" content="yes" />    
+<meta name="format-detection" content="telephone=no" />   
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+
+<script>  <!--这个框里面才放代码-->
+$(function(){
+    $("#backbutton").click(function(){
+        refresh();
+    });
+});
+function refresh(){
+    window.location.reload();
+}
+//可以写多几个自己想要的功能的啊，真是的。
+</script>
+</head>
+<body>
+
+
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>est话题存储场所1.0</h1>
+<div data-role="navbar">
+      <ul>
+        <li><a href="#login" data-rel="popup" data-position-to="window" data-icon="🤔" data-role="button">Login(测试中)</a> </li>
+        <li><a href="http://realzhengyiming.info/" data-icon="home">首页</a></li>
+        <li><a href="http://realzhengyiming.info/admin/login/?next=/admin/" data-ajax="false" data-icon="arrow-r">登陆</a></li>
+        <li><a href="#randomTopic" data-icon="star" data-rel="dialog" Ajax ="false">随机话题</a></li>
+
+      </ul>
+    </div>
+  </div>
+  
+  
+ <div data-role="popup" id="login" data-theme="a"> 
+  <!--加上这个标签这个东西可以放在主页那儿的啊，action="/login_action/"-->
+    <form style="padding:10px 20px;" method="POST" action="http://realzhengyiming.info/backhome/" data-ajax="false"> 
+      <h3><div align="center"> <p> 城门⛩ </p> </div> </h3> 
+      <label for="un" class="ui-hidden-accessible">Username:</label> 
+      <input type="text" name="username" id="username" placeholder="username" /> 
+      <label for="pw" class="ui-hidden-accessible">Password:</label> 
+      <input type="password" name="password" id="password" placeholder="zhimakaimen?" /> 
+      <button type="submit" data-theme="b">进城🙇‍</button> 
+      {% csrf_token %}
+    </form>  
+    </div>
+  
+<a href="#pagetwo" data-rel="dialog" data-transition="pop">登陆账号和密码呢</a>
+  <div data-role="content">
+    <h3>欢迎！这儿以后是存储大家要分享的话题的地方啦</h3>
+    {% for topic in topic_list %}
+        <section class="topic">
+            <header class="topic-header">
+                <h2 class="topic-title">{{ topic.title }}</h2>
+
+                    <p class="topic-meta">
+                        Time:  <a class="topic-author" href="#">{{ topic.creatTime }}</a><b><i>{{topic.editor}}</i></b>    <a class="post-category post-category-js" href="#">{{ post.category }}</a>
+                    </p>
+            </header>
+            
+                <div class="topic-description">
+        <p>    
+        <div data-role="collapsible" data-icon="grid">  
+      <h1>点我.具体背景</h1>
+      <p>{{ topic.background }}</p>
+	  
+    </div>
+        </p>
+         </div>
+        </section>
+    {% endfor %}
+
+
+	<div id="topic">
+	</div>
+  </div>
+
+  <div data-role="footer" class="ui-btn">
+  <!--这儿可以加上动作，那就是弹出一个窗口然后显示出随机出来的一个主体-->
+  <h1>🤔😇{{ current_time }}</h1>  
+  <a href="#pageme" data-role="button" data-rel="dialog" >about me</a>
+  <a href="#newchange" data-role="button" data-rel="dialog" >站点动态</a>
+  </div>
+</div> 
+
+
+ 
+
+
+<div data-role="page" id="pagetwo" >
+  <div data-role="header">
+    <h1>😃提示！😃</h1>
+  </div>
+  <div data-role="content">
+    <p>账号名字是你们名字的拼音，密码是"芝麻开门"的拼音。</p>
+    <a href="http://realzhengyiming.info/admin/login/?next=/admin/">登陆点这里</a>
+  </div>
+  
+  <div data-role="footer">
+  </div>
+</div> 
+
+<!--这儿是内嵌的子弹窗的页面而已啦-->
+<div data-role="page" id="pageme">
+  <div data-role="header">
+    <h1>关于我页面</h1>
+  </div>
+  <div data-role="content">
+  <h3>此页面爱看不看😎</h3>
+    <p>这个简单的小站点就是我做来玩的，顺便存了下我们的话题收集，我是<a href="mailto:realzhengyiming@outlook.com">郑义铭😏</a>，这个站点的用处只是简单的作为一个<b>存储话题的入口</b>有什么想法或者别的，当然可以联系我，看到我会回复你们</p>
+    <p>这个站点是不是太简单啦，有想法可以联系我，本人前端小白，当然欢迎交流。。。有空继续搞</p>
+	<a href="#pageone" >返回上一页</a>
+	
+  </div>
+  
+  <div data-role="footer">
+  </div>
+</div> 
+
+
+
+
+
+
+
+
+
+<!--内嵌页面2.是随机抽主题的功能,不知道为啥取不出东西出啦，真是的，这个功能没搞定-->
+
+<div data-role="page" id="randomTopic">
+  <div data-role="header">
+    <h1>随机到的主题是😉??</h1>
+  </div>
+  <div data-role="content" data-direction="slidedown">
+  <h3>{{randomTopic.title}}</h3>
+   <p>话题背景:{{ randomTopic.background }} </p>
+    <p>请开始你的演讲🙌</p>
+    <a href="http://realzhengyiming.info/" data-role="button" data-inline="true" id="backbutton" >返回</a>
+  </div>
+  </div>
+  
+
+  
+  
+  <div data-role="page" id="newchange">
+  <div data-role="header">
+    <h1>此站近期动态😉</h1>
+  </div>
+  <div data-role="content" data-direction="pop">
+  <h3>最近的破站点动态</h3>
+  {% for news in news_list %}
+   <p><big>{{news.content}}</big>----{{news.logTime}}</p>
+   
+    <p>好好维护🙌</p><!--晚点创建另外一个日志文档的模型，直接放这种东西就可以了-->
+  {%endfor%}
+    <a href="#pageone" data-role="button" data-inline="true"  >返回</a>
+  </div>
+  </div>
+  <div data-role="footer">
+  </div>
+</div> 
+
+</body>
+</html>
+
+

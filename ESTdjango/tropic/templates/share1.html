@@ -1,0 +1,99 @@
+{% load staticfiles %}
+{% load static %}
+<html>
+<head>
+<title>EST部门</title>
+   <!--这几个就是用来适应移动屏幕的这种设计_-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="renderer" content="webkit"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<link rel="shortcut icon" href="/static/media/city.png"><!--这个是图标的地址的-->
+
+  <link rel="stylesheet" href="{% static 'mdui/css/mdui.min.css' %}">
+
+
+
+
+</head>
+<body class="mdui-drawer-body-left mdui-drawer-body-right">
+
+  <!-- 默认抽屉栏在左侧 -->
+  <div class="mdui-drawer">
+    ... drawer content ...
+  </div>
+  
+  <!-- 如果要使抽屉栏在右侧，需要添加类 mdui-drawer-right -->
+  <div class="mdui-drawer mdui-drawer-right">
+    ... drawer content ...
+  </div>
+  
+  
+  <div class="mdui-card">
+
+  <!-- 卡片头部，包含头像、标题、副标题 -->
+  <div class="mdui-card-header">
+    <img class="mdui-card-header-avatar" src="avatar.jpg"/>
+    <div class="mdui-card-header-title">Title</div>
+    <div class="mdui-card-header-subtitle">Subtitle</div>
+  </div>
+  
+  <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
+  <div class="mdui-card-media">
+    <img src="card.jpg"/>
+    
+    <!-- 卡片中可以包含一个或多个菜单按钮 -->
+    <div class="mdui-card-menu">
+      <button class="mdui-btn mdui-btn-icon mdui-text-color-white"><i class="mdui-icon material-icons">share</i></button>
+    </div>
+  </div>
+  
+  <!-- 卡片的标题和副标题 -->
+  <div class="mdui-card-primary">
+    <div class="mdui-card-primary-title">Title</div>
+    <div class="mdui-card-primary-subtitle">Subtitle</div>
+  </div>
+  
+  <!-- 卡片的内容 -->
+  <div class="mdui-card-content">子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」</div>
+  
+  <!-- 卡片的按钮 -->
+  <div class="mdui-card-actions">
+    <button class="mdui-btn mdui-ripple">action 1</button>
+    <button class="mdui-btn mdui-ripple">action 2</button>
+    <button class="mdui-btn mdui-btn-icon mdui-float-right"><i class="mdui-icon material-icons">expand_more</i></button>
+  </div>
+  
+</div>
+  
+  
+
+  {{registAdd}}
+ 
+<br>
+================
+<br>
+{% if username %}
+注册失败{{ username }}已存在
+<a href="http://127.0.0.1:8000/regist">注册</a>
+{% else %}
+注册成功！
+<a href="http://127.0.0.1:8000/login">登陆</a>
+{% endif %}
+
+
+
+  
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<script type="text/javascript" src="{% static 'mdui/js/mdui.min.js' %}"></script>
+</body>
+</html>
+
+
+
+
+

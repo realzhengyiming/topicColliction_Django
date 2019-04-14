@@ -1,0 +1,861 @@
+{% load staticfiles %}
+{% load static %}
+<html>
+<head>
+<title>EST部门</title>
+   <!--这几个就是用来适应移动屏幕的这种设计_-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="renderer" content="webkit"> 
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+<link rel="shortcut icon" href="/static/media/city.png"><!--这个是图标的地址的-->
+
+  <link rel="stylesheet" href="{% static 'mdui/css/mdui.min.css' %}">
+
+
+
+
+</head>
+<body class="  mdui-appbar-with-toolbar mdui-appbar-with-tab  mdui-theme-primary-red-400  mdui-theme-accent-orange">
+<header >
+  <div class=" mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-toolbar-hide ">
+  <div class=" mdui-toolbar mdui-color-red-600 container-fluid">
+    <!--fluid意思是占满整个宽度，<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>-->
+    <a class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '关于我们'}" mdui-dialog="{target: '#exampleDialog'}" ><img class="mdui-icon material-icons" src="/static/media/cat.png" onMouseOut="this.src='/static/media/cat.png'" onMouseOver="this.src='/static/media/cat_white.png'"></img></a>
+    <a class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '登陆'}" mdui-dialog="{target: '#loginDialog'}"><img class="mdui-icon material-icons" src="/static/media/fish.png" onMouseOut="this.src='/static/media/fish.png'" onMouseOver="this.src='/static/media/fish_white.png'"></img></a> 
+    
+    <a class="mdui-btn mdui-btn-icon" target="_blank" mdui-dialog="{target:'#example-4'}" mdui-tooltip="{content: '历史事件'}" ><img class="mdui-icon material-icons" src="/static/media/history.png" onMouseOut="this.src='/static/media/history_front.png'" onMouseOver="this.src='/static/media/history.png'"></img></a> 
+
+    
+    <a href="http://zhengyiming.info" class="mdui-typo-title ">EST话题2.0</a>
+    <div class="mdui-toolbar-spacer"></div>
+    <div>
+{%if request.user.username %} 
+<span>
+<img class="mdui-chip-icon" src="{{ request.user.myuser.image.url }}"/>
+
+<select class="mdui-select "   id="userinfo" >
+      <option value="1" selected>{{request.user.username}}</option>
+     <option value="4">登出</option>
+
+ </select>
+<!-- <button class="mdui-btn mdui-ripple mdui-btn-dense mdui-btn-raised mdui-color-light-green" >确认 </button> -->
+</span>
+{%else%}
+ <span class="mdui-chip-title">请点鱼登陆
+</span>
+ <button class="mdui-fab mdui-fab-mini mdui-color-theme-accent" ></button>
+{%endif%}
+    </div>
+  </div> 
+  <div class=" tt2 mdui-tab mdui-color-red-600 mdui-tab-full-width" mdui-tab><!--这个也是动态生成,或者说这个是分类的内容，也是不错的。那么如何更多页的显示，或者说自动更好的加载出来-->
+    <a href="#tab1" class="mdui-ripple mdui-ripple-white mdui-bottom-nav-text-auto">话题</a>
+    <!--<a href="#tab2" class="mdui-ripple mdui-ripple-white mdui-bottom-nav-text-auto">Newest Topic</a>-->
+    <!--<a href="#tab3" class="mdui-ripple mdui-ripple-white mdui-bottom-nav-text-auto">randomTopic</a>-->
+    <a href="#commentArea" class="mdui-ripple mdui-ripple-white mdui-bottom-nav-text-auto">最新活动内容</a>
+    <a href="#tab3" class="mdui-ripple mdui-ripple-white mdui-bottom-nav-text-auto"><font class="mdui-color-black-text">常规活动签到</font></a>
+
+  </div> 
+</div>  
+
+</header>  <!--优化代码的结构-->
+    
+
+   
+<main class="mdui-container"> 
+<div id="tab1">
+<div id="chickenSoup">
+
+<div class="mdui-row-xs-2">
+
+<div class="mdui-col">
+    <br>
+    <br>
+  <blockquote >
+
+{%if  Soup%}  
+    <p>{{ Soup.soupContent }}</p>
+    <p>{{ Soup.quotoFrom }}</p>
+  </blockquote>
+  
+  <br>
+{%else%}
+鸡汤正在烹饪中...
+{%endif%}
+</div>
+<div class="mdui-col"><br><br>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=404610&auto=0&height=66"></iframe>
+
+</div>
+</div>
+</div>
+
+
+    {% for topic in topic_list %}
+        <!--这儿是具体的话题的内容的展开 内容区-->
+    <div class = "mdui-shadow-2 mdui-color-white">
+    <div class="mdui-card-header mdui-color-white">
+    <div class="mdui-card-header-avatar"><img class="avatar" src="{{topic.editorImgae}}" width="40" height="40"></div>
+    <div class="mdui-card-header-title mdui-text-color-theme-accent"><a mdui-tooltip="{content: '关于我'}"  rel="external nofollow">{{ topic.editor }}</a></div>
+    <div class="mdui-card-header-subtitle">{{topic.creatTime}}</div>
+    </div>
+    <div class="mdui-card-content"><p><h4>话题：{{ topic.title }}</h4>背景：{{ topic.background|safe }}</p></div>
+    <!--<div class="mdui-card-content"><p>背景：{{ topic.background }}</p></div>-->
+    <div class="mdui-divider-inset-dark "></div>
+    </div>
+    <!--这个是展开评论的组件-->
+<div class="mdui-panel" mdui-panel>
+  <div class="mdui-panel-item">
+    <div class="mdui-panel-item-header">
+        <div class="mdui-panel-item-title"></div>
+      <div class="mdui-panel-item-summary" style="color: green">展开/关闭评论😝</div>
+      <i class="mdui-panel-item-arrow mdui-icon material-icons">arrow_downward</i>
+    </div>
+    <div class="mdui-panel-item-body">
+    <div id = "newcomment-{{topic.id}}">
+    {%for comment in comments %}
+    {%if comment.speechtopic == topic%}
+        <!--评论的组件-->
+    <div class="mdui-card-header">
+    <div class="mdui-card-header-avatar"><img class="avatar" src="{{comment.imgurl}}" width="40" height="40"></div>
+    <div class="mdui-card-header-title mdui-text-color-theme-accent"><a mdui-dialog="{target: '#exampleDialog'}" mdui-tooltip="{content: '关于我'}"  rel="external nofollow">{{comment.user.username}}</a></div>
+    <div class="mdui-card-header-subtitle">{{comment.commenTime}}</div>
+    </div>
+    <div class="mdui-card-content"><p>{{comment.comment}}</p></div>
+    <div class="mdui-divider-inset-dark "></div>
+    {%endif%}
+    {%endfor%}
+ 
+    </div>
+<div class="mdui-panel-item-actions mdui-row mdui-row-gapless">
+    <div class="mdui-col-xs-9">
+        <div class="mdui-textfield mdui-textfield-expandable ">
+            <button class="mdui-textfield-icon mdui-btn mdui-btn-icon" id="commentOpen-{{ topic.id }}"><i class="mdui-icon material-icons">comment</i></button>
+            <input class="mdui-textfield-input " id="comment-{{ topic.id }}" type="text"  placeholder="在此输入评论"/>
+        <div >
+         <!--   <input type="text" id="username-{{request.user.username}}" style="display: none;" />-->
+            <button class="mdui-textfield-close mdui-btn mdui-btn-icon" id="btnTerminalSvr-{{ topic.id }}"><i class="mdui-icon material-icons">check</i></button>
+        </div>
+        </div>
+    </div>
+    
+    <div class="mdui-col-xs">
+        <a  class="mdui-icon material-icons"><i class="mdui-icon material-icons">favorite_border</i></a>
+        <button class="mdui-btn mdui-ripple floating-right" mdui-panel-item-close>关闭</button>
+    </div>
+   </div>
+    </div>
+  </div>
+</div>
+<!--这儿是包括的-->
+<br>
+<br>
+<br>
+{%endfor%}
+
+<!--这儿是下面那条框，是换页的东西-->
+<div class = "paginaion mdui-valign mdui-color-theme">   
+    <span class="step-links mdui-center" > 
+        <div class="mdui-tab mdui-tab-centered" mdui-tab>
+        
+        {% if topic_list.has_previous %} <!--这样就可以直接用啦-->
+        <a href="?page= {{topic_list.previous_page_number}}" class="mdui-ripple"><i class="mdui-icon material-icons">chevron_left</i></a>  
+        {%endif%}
+        <span class="current">
+        <a class="mdui-ripple">第{{topic_list.number}} 页/{{topic_list.paginator.num_pages }}页</a>
+        </span>
+        {%if topic_list.has_next %}
+        <a href="?page={{topic_list.next_page_number }}" class="mdui-ripple"><i class="mdui-icon material-icons">chevron_right</i></a>
+        {%endif%}
+
+        </div>
+    </span>
+
+</div>
+
+</div>
+
+
+<!-- 最新活动 -->
+<div id = "commentArea">
+
+
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+
+<div align="center" class="article-header clearfix">
+			<h1>{{content.blogTitle  }}</h1>
+			<div class="article-aboute">
+				<span id="pubtime_baidu" itemprop="datePublished" content="2018-01-18 17:30:47">{{content.blogTime}}</span>
+			    <span id="source_baidu">[ est 文章 ]</span> 
+			    <span id="author_baidu">作者：<a rel="nofollow">{{content.blogEditor.username }}</a></span>
+                <span >标签:{%for tag in content.blogTag.all%} <!--这样都行，还真不错-->
+                    <a href="#">{{tag}}-</a>
+                    {%endfor%}</span>
+			    
+			</div>
+		</div>
+
+<br>
+<br>
+<hr>
+正文：
+{{content.blogContent | safe}}<br>
+
+
+<!--灌水-->
+
+
+
+<!--灌水-->
+
+</div>
+
+
+
+<div id="tab3" >  
+{%if request.user.username%} 
+
+<!--
+    <div class="mdui-table-fluid">
+  <table class="mdui-table mdui-table-selectable">
+    <thead>
+      <tr>
+        <th>城员名字</th>
+        <th class="mdui-table-col-numeric" mdui-tooltip="{content: 'The total amount of food energy in the given serving size.'}">Calories</th>
+        <th class="mdui-table-col-numeric">城员名字 (g)</th>
+        <th class="mdui-table-col-numeric">话题贡献</th>
+        <th class="mdui-table-col-numeric">评论贡献</th>
+        <th class="mdui-table-col-numeric">点子贡献</th>
+        <th class="mdui-table-col-numeric" mdui-tooltip="{content: 'The amount of calcium as a percentage of the recommended daily amount.'}">Calclum (%)</th>
+        <th class="mdui-table-col-numeric">签到次数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="mdui-table-row-selected">
+        <td>zhengyiming</td>
+        <td>159</td>
+        <td>6.0</td>
+        <td>24</td>
+        <td>4.0</td>
+        <td>87</td>
+        <td>14%</td>
+        <td>1%</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>-->
+
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+ <!-- <script src="{% static 'ECharts/echarts.common.min.js' %}"></script>
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'EST部门数据'
+            },
+            tooltip: {},
+            legend: {
+                data:['数据量']
+            },
+            xAxis: {
+                data: ["总评数","总话题数","总成员数","总活动数","反馈数","站点更新数"]
+            },
+            yAxis: {},
+            series: [{
+                name: '数量',
+                type: 'bar',
+                data: [5, 50, 13, 2, 0, 10]
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script> -->
+
+
+
+<br></br>
+
+<!-- 签到框架 -->
+<h3>最新安排，可签到</h3>
+<div class="mdui-table-fluid">
+  <table class="mdui-table mdui-table-hoverable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>活动名</th>
+        <th>发布时间</th>
+        <th>活动地点</th>
+         <th>签到状态</th>
+           <th>总签到人数</th>
+           <th>已签到的人</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td>{{oneActivity.id}}</td>
+        <td>{{oneActivity.activityName}}</td>
+        <td>{{oneActivity.activityTime}}</td>
+        <td>{{oneActivity.location}}</td>
+        <!--点击的时候 ，弹出对话框，然后就可以提取数去，post数据出来的意思-->
+        <td><button class="mdui-btn-icon mdui-btn mdui-color-theme-accent mdui-ripple" id="check"><i id="state" class="mdui-icon material-icons mudi-color-green">{{state}}</i></button></td>
+     <!--    <td>    
+                <div class="toggle toggle--like">
+                    <input type="checkbox" id="toggle--like" class="toggle--checkbox">
+                    <label class="toggle--btn" for="toggle--like"><span class="toggle--feature"></span></label>
+                </div>
+        </td> -->
+
+
+
+        <td id="stateNumber" class="mdui-center">{{stateNumber}}</td>
+        <td><select class="mdui-select" id="showSign" >
+        <!-- 这里面也是再增加一条记录  -->
+        {%for signUser in signUsers%}
+              <option value="">{{signUser.username}}</option>
+        {%endfor%}
+
+            </select></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+
+</div>
+{%endif%}
+<div class="mdui-row-xs-2">
+  <div class="mdui-col">
+        <div class="mdui-divider-inset"></div>
+     
+        <h2 ><b>关于此站点</b></h2>
+        <blockquote>
+            <p>此站点服务于英协EST部门的，用于存储话题的场所，后期还将增加签到的记录之类的，此网站还在不断的完善之中。。。</p>
+            <footer>(ง •_•)ง</footer>
+        </blockquote>
+        <p>有什么需要需求直接问队长大大😀</P>
+        <p>网站目前维护人员是退役的后台小人物，站点方面建议可：realzhengyiming@outlook.com</p>
+  </div>
+  <div class="mdui-col">
+  {%if request.user.username%} 
+            
+            <h2><b>关于我的信息</b></h2>
+            <!--显示用户信息-->
+            <div class="mdui-card-header">
+            <div class="mdui-card-header-avatar"><img class="avatar" src="{{ request.user.myuser.image.url }}" width="50" height="50"></div>
+            <div class="mdui-card-header-title mdui-text-color-theme-accent"><a mdui-dialog="{target: '#exampleDialog'}" mdui-tooltip="{content: '关于我'}"  rel="external nofollow">{{ request.user.username }}</a></div>
+            <div class="mdui-card-header-subtitle">头衔:est成员</div>
+            </div>
+            <div class="mdui-card-content"><p>暴风城是我家，美化靠大家</p></div>
+            <div class="mdui-divider-inset-dark "></div>
+  {%endif%}
+  </div>
+
+</div>
+
+
+
+
+        
+</div>
+</div>
+</main>
+
+
+<article> 
+<!--这儿开始是选项卡的东西，每个地方会有一个选项卡-->
+<div class="mdui-progress" id="eewaiting"></div>
+<!--这儿是弹出的窗口-->
+<div class="mdui-dialog" id="exampleDialog">
+  <div class="mdui-dialog-title">我们是谁？</div>
+  <div class="mdui-dialog-content">
+<p>本人是广东石油化工学院的计算机专业学生</p>
+<p>本人爱好是python</p>
+<p>此站点就是本人使用django+material designer前端框架 粘起来的，欢迎吐槽交流</p>
+<p>此站点是一个平台用于服务est部门常规工作学习交流的</p>
+<!--<img src="/static/media/money.png"/>-->
+<img src="/media/photo/2cf8ca4e612042159b5dfffff196c86d.gif">
+<p>上图不是我的自画像，只是我的生活态度！</p> 
+<p>人生苦短，我用python</p>  
+<p>最后是我的联系方式：realzhengyiming@outlook.com 或者访问<a href="http://111.231.234.13/" target="_blank"><abbr title="郑义铭的个人博客">郑义铭的个人博客</abbr></a></p>
+</div>
+  <div class="mdui-dialog-actions">
+    <button class="mdui-btn mdui-ripple" mdui-dialog-close>cancel</button>
+  </div>
+</div>
+    
+
+
+<div class="mdui-dialog" id="signDialog">
+  <div class="mdui-dialog-title">签到框</div>
+  <div class="mdui-dialog-content">
+<p>请先打开gps，并且同意获取你们的地理位置</p>多个窗口重叠
+<p>打开后等一会儿，然后这儿再开始执行签到</p>
+<p>此站点就是本人使用django+material designer前端框架 粘起来的，欢迎吐槽交流</p>
+</div>
+  <div class="mdui-dialog-actions">
+    <button class="mdui-btn mdui-ripple" mdui-dialog-close>确定</button>
+  </div>
+</div>
+<div class="mdui-dialog" id="postTopic"> 
+  <div class="mdui-dialog-title">提交新话题</div>
+  <div class="mdui-dialog-content">
+<!--也就是说默认就是,当前页的post-->
+  <form name="form1" method="POST" action="/">  {% csrf_token %}
+<div class="mdui-textfield ">
+ <label class="mdui-textfield-label">User Name</label>
+  <input class="mdui-textfield-input" name="editor" readonly  id = "editor" maxlength="20" value="{{ request.user.username }}" required/>   
+</div>
+<div class="mdui-textfield mdui-textfield-floating-label">
+  <label  class="mdui-textfield-label">话题</label>
+  <textarea name= "title" class="mdui-textfield-input" type="text" id = "title" maxlength="200" required></textarea>
+  <div class="mdui-textfield-error">请把话题复制于此</div>
+</div> 
+<div class="mdui-textfield mdui-textfield-floating-label">
+  <input name= "editor_image" class="mdui-textfield-input" style="display: none;" type="hidden" id = "editor_image" value="{{ request.user.myuser.image.url}}" required></input>
+  <div class="mdui-textfield-error"></div>
+</div> 
+ 
+<div class="mdui-textfield mdui-textfield-floating-label">
+  <label  class="mdui-textfield-label">话题背景(800字节限制)</label>
+  <textarea name= "background" class="mdui-textfield-input" rows="2" type="text" id = "background" maxlength="800" required>
+</textarea>
+  <div class="mdui-textfield-error">请把背景复制于此</div>
+</div>
+ 
+<div class="mdui-dialog-actions">
+    <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+    <button class="mdui-btn mdui-ripple" type ="submit" value="submit" id="submint" onclick="javascript:{this.disabled=true;document.form1.submit();}">提交话题</button>
+</div>
+ </form> 
+</div>
+</div>
+</div>
+</div>
+
+<!-- <div class="mdui-dialog-title">登陆</div>
+  <div class="mdui-dialog-content">
+  
+                      
+<div class="mdui-textfield mdui-textfield-floating-label">
+  <label class="mdui-textfield-label">用户名</label>
+  <input class="mdui-textfield-input" name="username" type="text" id = "loginUsername" maxlength="20" required/>   
+  <div class="mdui-textfield-error">用户名错误</div>
+</div>
+ 
+<div class="mdui-textfield mdui-textfield-floating-label">
+  <label  class="mdui-textfield-label">用户密码</label>
+  <input name= "password" class="mdui-textfield-input" type="password" id = "loginPassword" maxlength="16" required/>
+  <div class="mdui-textfield-error">密码错误</div>
+</div>
+  <div class="mdui-dialog-actions">
+    <button class="mdui-btn mdui-ripple" mdui-dialog-close>cancel</button>
+    <button class="mdui-btn mdui-ripple"  id="login">登陆</button>
+  </div>
+    
+    </div> 
+    -->
+
+
+   
+
+
+    
+    
+    
+    
+  
+  <div class="mdui-dialog" id="loginDialog">
+  <div class="mdui-tab mdui-tab-full-width" id="example44-tab">
+    <a href="#example4-tab1" class="mdui-ripple">登陆</a>
+    <a href="#example4-tab2" class="mdui-ripple">注册</a>
+
+  </div>
+  
+  <div id="example4-tab1" class="mdui-p-a-2">
+  
+                      
+    <div class="mdui-textfield mdui-textfield-floating-label">
+  <label class="mdui-textfield-label">用户名</label>
+  <input class="mdui-textfield-input" name="username" type="text" id = "loginUsername" maxlength="20" required/>   
+  <div class="mdui-textfield-error">用户名错误</div>
+    </div>
+ 
+    <div class="mdui-textfield mdui-textfield-floating-label">
+  <label  class="mdui-textfield-label">用户密码</label>
+  <input name= "password" class="mdui-textfield-input" type="password" id = "loginPassword" maxlength="16" required/>
+  <div class="mdui-textfield-error">密码错误</div>
+    </div>
+  <div class="mdui-dialog-actions">
+    <button class="mdui-btn mdui-ripple" mdui-dialog-close>cancel</button>
+    <button class="mdui-btn mdui-ripple"  id="login">登陆</button>
+  </div>
+    
+    </div> 
+
+    <div id="example4-tab2" class="mdui-p-a-2">
+    <p>tab 2</p>
+    <p>tab 2</p>
+    <p>tab 2</p>
+    <p>tab 2</p>
+    <p>tab 2</p>
+    <p>tab 2</p>
+  </div>
+
+</div>
+
+
+
+<!--这儿是 随机话题弹出的对话框-->
+<div class="mdui-dialog " id="randomTopicDialog">
+  <div class="mdui-dialog-title mdui-center"><button class="mdui-center" id="randomTopic" >点击随机一个话题Σ(っ °Д °;)っ</button>
+</div>
+  <div class=" mdui-dialog-content mdui-center">
+    <div id="oneTopic" style="height: 600px;">
+
+<!--<img src="/static/media/money.png"/>-->
+<img src="/media/photo/2cf8ca4e612042159b5dfffff196c86d.gif">
+<p>一 <div class="mdui-valign mdui-spinner mdui-spinner-colorful"></div></p> 
+
+     </div>
+  </div>
+    <div class="mdui-dialog-actions">
+    <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+   
+  </div>
+</div>
+
+<!-- $( "#dialog" ).dialog(); -->
+
+
+</article>
+
+
+
+
+
+
+
+
+    
+<!--点击就可以进行操作了-->
+ <div class="mdui-fab-wrapper mdui-bottom-nav-scroll-hide" id="fab" mdui-fab="{trigger: 'click'}">
+<button class="mdui-fab mdui-ripple mdui-color-red-accent">
+      <i class="mdui-icon material-icons">add</i>
+      <i class="mdui-icon mdui-fab-opened material-icons">mode_edit</i>
+    </button>
+      <div class="mdui-fab-dial"> 
+{%if request.user.username %} 
+        <button class="mdui-fab  mdui-ripple mdui-color-brown-500"  mdui-tooltip="{content: '快速发布话题'}" mdui-dialog="{target: '#postTopic'}"><i class="mdui-icon material-icons">web</i></button> 
+{%else%}
+        <button class="mdui-fab  mdui-ripple mdui-color-brown-500"  mdui-tooltip="{content: '快速发布话题'}" mdui-dialog="{target: '#loginDialog'}"><i class="mdui-icon material-icons">web</i></button> 
+{%endif%}
+
+        <button class="mdui-fab  mdui-ripple mdui-color-orange" mdui-tooltip="{content: '随机话题'}" mdui-dialog="{target: '#randomTopicDialog'}"><img class="material-icons mdui-icon" src="static/media/paper.png"/></button>
+        <a target="_blank" href="/admin/" class="mdui-fab  mdui-ripple mdui-color-red" mdui-tooltip="{content: '高级EST后台'}"><i class="mdui-icon material-icons">build</i></a>
+      </div>
+    </div>   
+
+
+<div class="mdui-bottom-nav mdui-bottom-nav-scroll-hide">
+   <p class="mdui-center"> create by zhengyiming,django,python with ❤ 2017--2018 </p><br>
+　<p class="mdui-center"><a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备17149532号</a></p> 
+
+
+
+  </div>
+
+<!--下面就是js代码了      -->
+
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<script type="text/javascript" src="{% static 'mdui/js/mdui.min.js' %}"></script>
+
+<script type="text/javascript">
+    window.onload = function(){
+
+
+
+        // listenRandomButton();//执行监听，单线程的吗
+        // alert("fuck");
+
+        if("{{topic_list.number}}"=="1"){
+                  mdui.snackbar({
+                message: '  欢迎 成员'+"{{request.user.username}}",                //buttonText:'评论成功'
+            });
+
+        }
+        if ("{{request.user.username}}"==""){
+                mdui.snackbar({
+                message: '  喂，游客你好像还没登陆哇  '
+
+                //buttonText:'评论成功'
+            });
+        }
+
+
+
+        var imgurl = "{{ request.user.myuser.image.url }}"
+      
+        var inputs = document.getElementsByTagName("button"); //这儿可是数组呢，当然不行的啦
+
+        if(inputs){  //只监听是提交评论的按钮
+            for(var idx = 0; idx <inputs.length; idx ++){
+                if(inputs[idx].id.split("-")[0]=="btnTerminalSvr"){
+                    var obj = inputs[idx];  //这儿的意思就是这儿是一个数组的样子的感觉
+                    obj.onclick = function(){
+                    var post_id = this.id.split("-")[1]; //对啊，执行一个的啊，这个
+                    postComment(post_id);  //有没有登陆点击提交都会进去，统一进去这儿
+                            }
+
+                        }
+
+                if(inputs[idx].id.split("-")[0]=="commentOpen"){
+                    var obj1 = inputs[idx];  //这儿的意思就是这儿是一个数组的样子的感觉
+                    obj1.onclick = function(){
+                    // var post_id = this.id.split("-")[1];
+                    // alert("提取到id的反对非法的："); //一样的，可以提取出来的
+                    mdui.snackbar({
+                            message: '请输入评论内容 ',
+                            
+                                });
+
+                                            }
+
+                            }
+
+
+                
+                    }
+                }
+
+
+    }
+
+// js代码真的是，要么就是没有导入jquery ，要么就是少了一点符号，括号什么的，fu*k
+ function postComment(post_id){
+
+    $.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+    var username = "{{request.user.username}}"
+
+    if (username==""){  //未登录的时候
+        mdui.snackbar({
+            message: '请登陆后再发表评论😀',
+            // buttonText:""
+            position:'bottom',
+                    });
+        // $("#newcomment-"+post_id).html("<font size='3' color='red'>请登陆后再发表评论</font>");
+
+    }
+    else{  //如果登陆了的话
+
+            var userimge = "{{ request.user.myuser.image.url }}"
+            ///alert("{{ request.user.myuser.image.url }}");
+            // if (("#comment-"+post_id).val())
+            var comment = $("#comment-"+post_id).val();
+
+            if(comment!=""){
+                            var topic_id = post_id;
+            var alldata = {"username":username,"topic_id":topic_id,"comment":comment ,"userimge":userimge};
+             $.ajax({
+                url: '/terminal_svr',  //使用相对地址的好处就是这样子了
+                type: 'POST',
+                data: JSON.stringify(alldata),
+                dataType: 'json',
+                timeout: 10000,
+                success: function(result) {
+                if ( result.result == "post_success" ) {
+                  mdui.snackbar({
+                        message: 'Message sent',
+                        buttonText:'评论成功👌'
+                    });
+                    $("#newcomment-"+post_id).empty();  //评论成功的话就清空此标签下的孩子标签
+                                                    
+                    //应该是评论成功才会执行的啊
+                  // $("#ntfText").html(result.result);  //或者这儿改成增加innerhttp那个，在做着就改成动态刷新那一小段的地方，返回全部的最新comment过来
+                  $("#newcomment-"+post_id).html(result.newcomment);  
+
+                        }else {   //post
+                          $("#newcomment-"+post_id).html("<font size='3' color='red'>请登陆后再发表评论</font>");
+                                }       
+                                     }
+                    });
+            }
+            else{
+                    mdui.snackbar({
+                        message: '评论不能为空啦',
+                        buttonText:'😱',
+                    });
+            }
+
+        }
+
+  };
+</script>  
+
+
+
+<script type="text/javascript">
+            $("#randomTopic").click(function(){
+             // alert("randomTopic!");  //执行到了这儿
+
+                 $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    });
+
+                var alldata = {"request":"getATopic"};
+                $.ajax({
+                    url: '/randomtopic',
+                    type: 'POST',
+                    data: JSON.stringify(alldata),
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function(result) {
+                        if ( result.result == "post_success" ) {
+                          mdui.snackbar({
+                                message: 'getTopic Successed',
+                                buttonText:'找到一个话题👌'
+                            });
+                        $("#oneTopic").empty();  //评论成功的话就清空此标签下的孩子标签
+
+                        $("#oneTopic").html("成功随机出话题(oﾟvﾟ)ノ"+result.oneTopic);  
+                    }else {   //post
+                        $("#onetopic").html("<font size='3' color='red'>请检查网络后再查看</font>");
+                    }       
+                    }
+                        
+                    });
+
+
+            });
+</script>
+
+
+    <script type="text/javascript"> 
+//check sign the activity
+            $("#check").click(function(){
+            var buttonValue= document.getElementById('check').innerText;
+            // alert(buttonValue);
+            if (buttonValue=="check")
+            {
+                               mdui.snackbar({
+                                message: 'check Successed',
+                                buttonText:'您无需再签到👌'
+                            });
+            }else{
+               //执行到了这儿
+
+                 $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    });
+                var signName = "{{request.user.username}}"
+                var signActivity ="{{oneActivity.id}}";
+                var alldata = {"SignName":signName,"signActivity":signActivity};
+                //alert(signName);
+                $.ajax({
+                    url: '/signactivity',
+                    type: 'POST',
+                    data: JSON.stringify(alldata),
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function(result) {
+                        if ( result.result == "post_success" ) {
+                          mdui.snackbar({
+                                message: 'sent Successed',
+                                buttonText:'签到成功👌'
+                            });
+                        $("#state").empty();  //签到成功就把close去掉
+                        $("#state").html(result.state);  
+
+                        var stateNumbers= document.getElementById('stateNumber').innerText;
+                        // $("#stateNumber").empty();
+                            stateNumbers = parseInt(stateNumbers)+1
+                        $("#stateNumber").html(stateNumbers);
+                        // $("#showSign").html(
+                            //插进去一个人就可以了
+                            $("#showSign").append('<option value="">{{request.user.username}}</option>');
+
+                        $("#state").attr("disabled", true); 
+                    }else {   //post
+                        $("#state").html("<font size='3' color='red'>请检查网络后再查看</font>");
+                    }       
+                    }
+                        
+                    });
+
+  }
+            });
+          
+
+
+</script>
+<!-- ajax登陆处理 -->
+<script type="text/javascript">
+                $("#login").click(function(){
+             // alert("randomTopic!");  //执行到了这儿
+                 $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    });
+
+                 var loginUsername = document.getElementById('loginUsername').value;
+                 var loginPassword = document.getElementById('loginPassword').value;
+                 // alert(loginUsername +loginPassword);
+
+                
+            var alldata = {"request":"Login","loginUsername":loginUsername,"loginPassword":loginPassword};
+                // alert(alldata);
+                $.ajax({
+                    url: '/login',
+                    type: 'POST',
+                    data: JSON.stringify(alldata),
+                    dataType: 'json',
+                    timeout: 10000,
+                    success: function(result) {
+                        //这个提示根本就看不到的
+                        if ( result.result == "post_success" ) {
+                          mdui.snackbar({
+                                message: '登陆成功',
+                                buttonText:'👌'
+                            });
+                          location.reload(true) ;
+    
+                    }else {   //post
+                          mdui.snackbar({
+                                message: '用户名和密码有误',
+                                buttonText:'😱'
+                            });
+                          // alert("fuck")
+                        // $("#onetopic").html("<font size='3' color='red'>请检查网络后再查看</font>");
+                    }       
+                    }
+                        
+                    });
+
+
+            });
+
+
+   
+
+</script>
+
+<script> 
+  var tab = new mdui.Tab('#example44-tab');
+  document.getElementById('loginDialog').addEventListener('open.mdui.dialog', function () {
+    tab.handleUpdate();
+  });
+</script>
+
+</body>
+</html>

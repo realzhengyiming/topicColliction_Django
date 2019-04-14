@@ -1,0 +1,147 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 这个界面可以作为根模板的东西，然后使用继承来搞就可以啦 -->
+    <title>个人中心</title>
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="{% static 'materialize/css/materialize.min.css' %}"  media="screen,projection"/> 
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style type="text/css">
+
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+     
+        #canvas{
+            border: 1px solid #ADACB0;
+            display: block;
+            margin: 20px auto;
+        }
+    
+    
+          
+     
+   
+</style>
+
+ </head>
+ <body>
+
+
+
+
+  <nav class="nav-extended">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">&nbsp&nbsp{%if request.username%}{{request.user.username}}{%endif%}'s EST</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href=".html">我的EST</a></li>
+        <li><a href="http://myest.club/topic">话题</a></li>
+        <li><a href="pages/">文章</a></li>
+        
+      </ul>
+    </div>
+
+  </nav>
+
+  <!-- <ul class="sidenav" id="mobile-demo"> -->
+  <ul id="mobile-demo" class="sidenav">
+    <li><div class="user-view">
+      <!-- <div class="background"> -->
+        <!-- <img src="images/office.jpg"> -->
+      <!-- </div> -->
+      <a href="#user"><img class="circle" src="/static/media/faceID.png"></a>
+      <a href="#name"><span class="white-text name">username</span></a>
+      <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+    </div></li>
+    <li><a href="#!"><i class="material-icons">cloud</i>我的EST</a></li>
+    <li><a href="#!">画画图</a></li>
+    <li><a href="#!">文章</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">continue...</a></li>
+    <li><a class="waves-effect" href="#!">...</a></li>
+  </ul>
+
+
+        
+
+<!-- <div class="navbar-fixed"> -->
+
+
+    <li><a href="http://111.231.234.13/admin" target="_blank"><i class="material-icons">cloud</i>后台</a></li>
+{% block body %}
+{% endblock %}
+        
+<!--手机导航栏-->
+
+
+    
+<!-- 这儿是内容的东西 -->
+<div class="container">
+{% block main %}
+
+
+{% endblock %}
+</div>
+<br>
+<br>
+
+
+
+ 
+
+ 
+
+
+<footer align="center">
+    
+<p align="center">Copyright 2018 ©  produced by python |  英协人  <!-- <label>
+              <input type="checkbox" class="filled-in" checked="checked">
+              <span>Filled in</span>
+            </label> -->
+            <p align="center">Powered by: django</p>
+       
+</footer>
+
+<!-- <img src="{% static 'media/something.jpg' %}" alt="Contact Person"> -->
+
+<!-- <script src="{% static 'jquery-3.3.1.js' %}"></script> -->
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<!--JavaScript at end of body for optimized loading-->
+      <script type="text/javascript" src="{% static 'materialize/js/materialize.min.js' %}"></script>
+
+<script type="text/javascript">
+    
+
+     // document.addEventListener('DOMContentLoaded', function() {
+    // var elems = document.querySelectorAll('.sidenav');
+    // var instances = M.Sidenav.init(elems, options);
+  // });
+
+  // Initialize collapsible (uncomment the lines below if you use the dropdown variation)
+  // var collapsibleElem = document.querySelector('.collapsible');
+  // var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+
+  // Or with jQuery
+
+  $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>
+
+</body>
+</html>
